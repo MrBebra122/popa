@@ -34,7 +34,7 @@ if neznakomec == "да":
     input()
 
     if vanna == "да":
-        
+
         print("Вы подползаете к ванной, но дверь заперта.")
 
         input()
@@ -64,14 +64,54 @@ else:
     data = {
         "name": "user"
     }
-    import json
-    with open("data.json", "w") as outfile:
-        json.dump(data, outfile)
+    with open("novels.json", "r") as file:
+        novels = json.load(file)
+    except FileNotFoundError:
+    novels = {}
 
-        import csv
 
-        data = [
-            ["Имя", "Возраст", "Город"]]
-        with open("data.csv", "w", newline="") as csvfile:
-            writer = csv.writer(csvfile)
-        writer.writerows(data)
+    # Функция сохранения новеллы
+    def save_novel():
+        title = input("Введите название новеллы: ")
+
+
+    author = input("Введите автора новеллы: ")
+    content = input("Введите содержание новеллы: ")
+
+    novels[title] = {"author": author, "content": content}
+
+    with open("novels.json", "w") as file:
+        json.dump(novels, file)
+
+    print(f"Новелла '{title}' сохранена успешно!")
+
+
+    # Функция удаления новеллы
+def delete_novel():
+ title = input("Введите название новеллы для удаления: ")
+
+if title in novels:
+ del novels[title]:
+        
+with open("novels.json", "w") as file:
+     json.dump(novels, file)
+
+print(f"Новелла '{title}' удалена успешно!")
+
+else:
+print(f"Новелла '{title}' не найдена!")
+
+#Основной код
+while True:
+     print("Доступные команды:")
+     print("1 - Сохранить новеллу")
+     print("2 - Удалить новеллу")
+     print("q - Выйти")
+
+    command = input("Введите команду: ")
+
+if command == "1":
+        save_novel()
+elif command == "2":
+        delete_novel()
+elif command.lower() == "q":
