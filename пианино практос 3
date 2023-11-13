@@ -13,20 +13,20 @@ namespace Пианино
 
         static int[] currentOctave;
 
-        static void PlayPianinka(ConsoleKey key)
+        static void PlayPianinka(ConsoleKey key) // Проверка, является ли нажатая клавиша буквой от A до Oem102
         {
             int i;
-            if (key >= ConsoleKey.A && key <= ConsoleKey.Oem102)
+            if (key >= ConsoleKey.A && key <= ConsoleKey.Oem102) // Преобразование клавиши в индекс массива
             {
                 i = (int)key - (int)ConsoleKey.A;
             }
-            else
+            else   // Возврат, если клавиша не является буквой
             {
                 return;
             }
-            if (i >= 0 && i < currentOctave.Length)
+            if (i >= 0 && i < currentOctave.Length)  // Проверка, находится ли индекс в пределах массива текущей октавы
             {
-                int z = currentOctave[i];
+                int z = currentOctave[i]; // Воспроизведение звука с использованием 
                 Console.Beep(z, 150);
             }
         }
@@ -64,6 +64,6 @@ namespace Пианино
             }
         }
 
-  
+
     }
 }
