@@ -1,3 +1,4 @@
+import math
 print ("Здрасте! введите операцию")
 while True:
  operation = input("Введите 'Q' для выхода")
@@ -39,44 +40,28 @@ if operation == '+':
  result = number1 + number2
 elif operation == '-':
  result = number1 - number2
+elif operation == '**':
+ result = number1 ** number2
 elif operation == '*':
  result = number1 * number2
 elif operation == '/':
  if number2 != 0:
   result = number1 / number2
-else:
- print("Ошибка: деление на ноль!")
+ else:
+  print("Ошибка: деление на ноль!")
 
 print("Результат:", result)
 
-elif operation == '**'
-number = float(input("Введите число: "))
-power = float(input("Введите степень: "))
-result = number ** power
-print("Результат:", result)
-
-elif operation == 'sqrt'
-number = float(input("Введите число: "))
-if number >= 0:
- result = math.sqrt(number)
-print("Результат:", result)
-else:
-print("Ошибка: отрицательное число в подкоренном выражении!")
-
-elif operation == '!'
-number = int(input("Введите целое неотрицательное число: "))
-if number >= 0:
- result = math.factorial(number)
-print("Результат:", result)
-else
-print("Ошибка: отрицательное число!")
-elif
-operation in 'sin', 'cos', 'tan'
-number = float(input("Введите угол (в радианах): "))
+elif operation in 'sin', 'cos', 'pi', 'sqrt':\
+    (number1) = float(input("Введите угол (в радианах): "))
 if operation == 'sin':
- result = math.sin(number)
+    print(math.sin(math.pi/2))
+    result = math.sin(number1)
 elif operation == 'cos':
- result = math.cos(number)
-elif operation == 'tan':
- result = math.tan(number)
+    print(math.sin(math.pi))
+    result = math.cos(number1)
+elif operation == 'pi':
+    print(math.pi)
+elif operation == 'sqrt':
+    print(math.sqrt(25))
 print("Результат:", result)
