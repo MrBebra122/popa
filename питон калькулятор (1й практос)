@@ -16,7 +16,7 @@ bttn_list = [
 "7", "8", "9", "+", "*",
 "4", "5", "6", "-", "/",
 "1", "2", "3",  "=", "**",
-"0",
+"0", "!",
 "Exit", "sin", "cos", "tg"
 "√2", ]   #сейчас мы создали кнопки для нашей программы.
 calc_entry = Entry(root, width = 33)
@@ -28,40 +28,46 @@ def calc(key):
         messagebox.showerror("Ошибка", "Нет цифр")  #сключаем слова, чтобы наш пользователь вводил только цифры.
 
 #Самое время присваивать значения нашим функциям.
-if operation in ['+', '-', '*', '/']:
+if operation in ['+', '-', '*','**', '/', '!', 'cos', 'sin', 'tg', '√2']:
  number1 = float(input("Введите первое число: "))
-number2 = float(input("Введите второе число: "))
-
-if operation in ['+', '-', '*', '/']:
- number1 = float(input("Введите первое число: "))
-number2 = float(input("Введите второе число: "))
+ number2 = float(input("Введите второе число: "))
 
 if operation == '+':
  result = number1 + number2
+ print("Результат:", result)
+
 elif operation == '-':
  result = number1 - number2
+ print("Результат:", result)
+
 elif operation == '**':
  result = number1 ** number2
+ print("Результат:", result)
+
 elif operation == '*':
  result = number1 * number2
+ print("Результат:", result)
+
 elif operation == '/':
  if number2 != 0:
+
   result = number1 / number2
+  print("Результат:", result)
+
  else:
   print("Ошибка: деление на ноль!")
 
-print("Результат:", result)
+elif operation in ['sin', 'cos', 'pi', 'sqrt']: number1 = float(input("Введите угол (в радианах): "))
 
-elif operation in 'sin', 'cos', 'pi', 'sqrt':\
-    (number1) = float(input("Введите угол (в радианах): "))
 if operation == 'sin':
     print(math.sin(math.pi/2))
     result = math.sin(number1)
+
 elif operation == 'cos':
     print(math.sin(math.pi))
     result = math.cos(number1)
-elif operation == 'pi':
-    print(math.pi)
-elif operation == 'sqrt':
-    print(math.sqrt(25))
-print("Результат:", result)
+elif operation == 'pi':print(math.pi)
+
+elif operation == '!':print(math.factorial(5))
+
+elif operation == 'sqrt':print(math.sqrt(25))
