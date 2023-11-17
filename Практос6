@@ -1,0 +1,138 @@
+using Newtonsoft.Json; //сохранение в json
+using Swashbuckle.Swagger; 
+using System.Threading.Tasks;
+using System.Xml; //сохранение в xml
+using System.Xml.Serialization;
+using практос6; //название самой работы
+
+class ProgramchotoNaKitayskom
+{
+    static void Main() //в рамках этого класса мы пишем весь код
+    {
+        ConsoleKeyInfo key; 
+        List<choto> Bra = new List<choto>(); //создание нового листа
+
+        Console.WriteLine("укажите полный путь файла"); 
+        string path = Console.ReadLine();
+
+        if (path.EndsWith(".txt")) //если на конце txt - выполнение следующего действия
+        {
+            string[] fileGhg = File.ReadAllLines(path); //прочесть файл
+
+            for (int i = 0; i < fileGhg.Length; i += 2)
+            {
+
+                choto cho = new choto();
+                cho.Imia = fileGhg[i]; //добавление имени
+                cho.Kolithestvo = int.Parse(fileGhg[i + 1]); //добавление числа
+
+                Bra.Add(cho); //создание нового экземпляра
+
+
+            }
+            Console.Clear(); //очищаем консоль
+            Console.WriteLine("Чтобы перейти к выбору сохранений нажмите F1. Если хотите закрыть программу - Escape");
+            Console.WriteLine("Содержимое файла:");
+        }
+        else if (path.EndsWith(".xml")) //выполняется процесс десериализации (перевод из текста в файле в код)
+        {
+            XmlSerializer xml = new XmlSerializer(typeof(List<choto>)); //для раскрытия информации xml
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+                Bra = (List<choto>)xml.Deserialize(fs);
+
+            Console.Clear();
+            Console.WriteLine("Чтобы перейти к выбору сохранений нажмите F1. Если хотите закрыть программу - Escape");
+            Console.WriteLine("Содержимое файла:");
+
+        }
+        else if (path.EndsWith(".json")) //выполняется процесс десериализации (перевод из текста в файле в код)
+        {
+            string text = File.ReadAllText(path);
+            Bra = JsonConvert.DeserializeObject<List<choto>>(text);
+
+            Console.Clear();
+            Console.WriteLine("Чтобы перейти к выбору сохранений нажмите F1. Если хотите закрыть программу - Escape");
+            Console.WriteLine("Содержимое файла:");
+
+        }
+        foreach (var item in Bra) //для вывода информации из txt
+        {
+            Console.WriteLine(item.Imia); //это тоже для информации
+            Console.WriteLine(item.Kolithestvo);
+        }
+
+        key = Console.ReadKey(); //вызов ключа (если ключ равен f1 - вызывает "if")
+        if (key.Key == ConsoleKey.F1) 
+        {
+            Console.Clear();
+            Console.WriteLine("В каком формате хотите сохранить файл? измените последние символы в названии файла: (1 .txt 2 .xml . 3 .json)");
+            path = Console.ReadLine();
+
+            if (path.EndsWith(".txt")) //если конец файла = txt - выполнить условие
+            {
+                foreach (var item in Bra) //для выполнения txt
+                {
+                    File.AppendAllText(path, item.Imia + "\n"); //вывод информации о нашем файле (символы)
+                    File.AppendAllText(path, item.Kolithestvo.ToString() + "\n"); //вывод информации о нашем файле (цифры)
+                }
+            }
+            else if (path.EndsWith(".xml")) //если конец файла = xml - выполнить условие
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<choto>)); //выполняется для сериализации (перевода из кода в текст)
+                using (FileStream fs = new FileStream(path, FileMode.Create))
+                {
+                    xmlSerializer.Serialize(fs, Bra); //тоже сериализация 
+                }   
+            }
+            else if (path.EndsWith(".json")) //если конец файла = json - выполнить условие
+            {
+                string json = JsonConvert.SerializeObject(Bra); //тоже сериализация
+
+                File.WriteAllText(path, json);
+            }
+        }
+    }
+}
+
+//json
+[
+  {
+    "Imia": "Группа",
+    "Kolithestvo": 20
+  },
+  {
+    "Imia": "Ларёк",
+    "Kolithestvo": 15
+  }
+]
+
+//xml
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfChoto xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <choto>
+    <Imia>Группа</Imia>
+    <Kolithestvo>20</Kolithestvo>
+  </choto>
+  <choto>
+    <Imia>Ларёк</Imia>
+    <Kolithestvo>15</Kolithestvo>
+  </choto>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+//класс
+namespace практос6
+{
+    public class choto
+    {
+
+        public string Imia;
+        public int Kolithestvo;
+
+    }
+}
+</ArrayOfChoto>
