@@ -1,0 +1,169 @@
+// должно быть в classe1
+using Paps; //Системные фиговины которые появляются сами
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Rabota
+{
+    internal class arc
+    {
+        public static class FileExplorer
+        {
+            private static void OpenFile(string filePath) ////если choice = номеру файла то открывает файл
+            {
+                Console.Clear();
+                Process.Start(new ProcessStartInfo { FileName = filePath, UseShellExecute = true });
+            }
+
+            private static string currentPath = ""; // приватная (не изменяемая вне класса) переменная
+            private static Stack<string> previousPaths = new Stack<string>(); //приватный массив(или что-то подобное) с предыдущими путями
+            public static void Start()
+            {
+                Console.WriteLine("Щас взломаю ваш кампьютер");
+                Console.WriteLine("Мухахаха");
+                Console.WriteLine("Выберите диск какой взламать:");
+                DriveInfo[] drives = DriveInfo.GetDrives(); //записывается информация про диски
+                foreach (DriveInfo disk in drives) // цикл выводящий диски и инфу про них
+
+                {
+                    Console.WriteLine($"  {disk.Name}  Можно взломать {Math.Round(Convert.ToDecimal(disk.AvailableFreeSpace / 1073741824))} ГБ из {Math.Round(Convert.ToDecimal(disk.TotalSize / 1073741824))} ГБ"); //выводит сколько места свободно на диске
+                }
+
+                int choice = Menu.Pokaz(drives.Length + 2); //выбор диска
+                string selectedDrive = drives[choice].RootDirectory.FullName;
+                previousPaths.Clear();
+                Console.Clear();
+                currentPath = selectedDrive;  
+
+                Put(currentPath);
+            }
+            private static void Put(string path)
+            {
+                while (true)
+                {
+                    Console.WriteLine("Текущая папка: " + path); //выбор файла для взлома
+                    Console.WriteLine();
+                    Console.WriteLine("Выберите папку или файл:");
+                    DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                    int directoriesCount = 0;
+                    foreach (var directory in directoryInfo.GetDirectories())
+                    {
+                        Console.WriteLine($"  {directoriesCount + 1}. {directory.Name}");
+                        directoriesCount++;
+                    }
+
+                    int filesCount = 0; //цикл подсчитывающий кол-во папок и файлов и вывод их пронумерованными
+                    foreach (var file in directoryInfo.GetFiles())
+                    {
+                        Console.WriteLine($"  {filesCount + 1 + directoriesCount}. {file.Name}");
+                        filesCount++;
+                    }
+
+
+                    int choice = Menu.Pokaz(directoriesCount + filesCount + 2);
+                    Console.Clear();
+
+                    if (choice == -1) //озвращает назад
+                    {
+                        if (previousPaths.Count > 0)
+                        {
+                            path = previousPaths.Pop();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else if (choice <= directoriesCount) //если choice = номеру папки то открывает папку
+                    {
+                        DirectoryInfo selectedDir = directoryInfo.GetDirectories()[choice];
+                        previousPaths.Push(path);
+                        path = selectedDir.FullName;
+                    }
+                    else //если choice = номеру файла то открывает файл
+                    {
+                        FileInfo selectedFile = directoryInfo.GetFiles()[choice - directoriesCount];
+                        OpenFile(selectedFile.FullName);
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+//должно быть в Program.cs
+using Paps;
+using System.Diagnostics;
+
+namespace Rabota
+{
+    public class Program
+    {
+        public static void Main(string[] args) //обращение к классу и методу
+        {
+            arc.FileExplorer.Start();
+        }
+    }
+}
+
+//class2
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Paps
+{
+    internal class Menu
+    {
+        public static int Poka(int maxs)
+        {
+            int pos = 3;
+            ConsoleKeyInfo key;
+
+            do
+            {
+                Console.SetCursorPosition(0, pos); //strloshki
+                Console.WriteLine("->");
+
+                key = Console.ReadKey();
+
+                Console.SetCursorPosition(0, pos);
+                Console.WriteLine("  ");
+
+                if (key.Key == ConsoleKey.UpArrow && pos > 3) //вверх
+                {
+                    pos--;
+                }
+                else if (key.Key == ConsoleKey.DownArrow && pos != maxs) //вверх
+                {
+                    pos++;
+                }
+                else if (key.Key == ConsoleKey.Escape)
+                {
+                    pos = 0;
+                    Console.Clear();
+                }
+
+            } while (key.Key != ConsoleKey.Enter && key.Key != ConsoleKey.Escape); //цикл с постусловием который должен работать до тех пор пока не будет нажата Enter или Escape
+
+            if (key.Key == ConsoleKey.Enter)
+            {
+                return pos -1; //выбрать папку
+            }
+            else
+            {
+                pos = -1; //вернуться на папку назад
+                return pos;
+            }
+
+        }
+    }
+}
