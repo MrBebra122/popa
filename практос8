@@ -1,0 +1,134 @@
+// класс 1
+using System.Reflection.PortableExecutable;
+using rabota;
+
+void text1()
+{
+    Console.WriteLine("Ввекдите имя для таблицы рекордов");
+    pech.name = Console.ReadLine();
+    Console.Clear();
+    char[] alpha = " Вот, собственно, и вся история. Теперь два слова о происхождении самого текста. Вернувшись в конце 1866 года в Ясную Поляну, Толстой, естественно, не убирал на полку свою 726-страничную рукопись, чтоб начать всё с начала, с первой страницы. Так что мне, дипломированному филологу и редактору с 30-летним стажем, досталась только самая лёгкая и приятная работа этот текст, то есть сделать его приемлемым для широкого читателя: вычитать, исправить грамматические ошибки, уточнить нумерацию глав и т.п. При этом я правил только то, что нельзя было не править ".ToCharArray();
+    int l = 0;
+    foreach (var h in alpha)
+    {
+        Console.Write(h);
+        l++;
+        if (l == 100)
+        {
+            Console.WriteLine();
+            l = 0;
+        }
+    }
+    Console.WriteLine("\r\n\r\n ВНИМАНИЕ! Shift также учитывается, как запятые и точки. Нажмите enter для старта");
+    while (true)
+    {
+        ConsoleKeyInfo key = Console.ReadKey(true);
+        if (key.Key == ConsoleKey.Enter)
+        {
+            break;
+        }
+    }
+    jaja.Thread.Start();
+    pech.textm = pech.Test(alpha);
+    pech.texts = pech.textm / 60;
+    Thread.CurrentThread.Abort();
+    Console.WriteLine("Ваши результаты: символов в минуту: " + pech.textm + ", символов в секунду: " + pech.texts); //выводит результаты
+    while (true)
+    {
+        Console.WriteLine("Хотите ли вы попробывать еще раз? enter - да, esc - нет");
+        ConsoleKeyInfo key = Console.ReadKey(true);
+        if (key.Key == ConsoleKey.Enter)
+        {
+            text1();
+        }
+        if (key.Key == ConsoleKey.Escape)
+        {
+            break;
+        }
+    }
+}
+text1();
+
+//класс 2
+
+using System;
+using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace rabota
+{
+    internal class pech
+    {
+        public static int texts;
+        public static int textm;
+        public static String name;
+        public static int Test(char[] alpha)
+        {
+
+            int pos = 0;
+            int str = 0;
+
+            int text = 0;
+            while (jaja.b == 0)
+            {
+                text = str * 100 + pos;
+                if (text == 891) { jaja.b = 1; }
+                Console.SetCursorPosition(pos, str);
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                if (key.KeyChar != alpha[text])
+                {
+                    Console.ForegroundColor = ConsoleColor.Red; //неправильно написанные буквы выделяются красным цветом
+                    Console.Write(alpha[text]);
+                }
+                if (key.KeyChar == alpha[text])
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue; //правильно написанные буквы будут выделяться синим цветом
+                    Console.Write(alpha[text]);
+                    pos++;
+                    if (pos == 101)
+                    {
+                        pos = 0;
+                        str++;
+                    }
+                }
+            }
+            return text;
+        }
+    }
+}
+
+//класс 3 
+
+using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace rabota
+{
+    internal class jaja
+    {
+        static public int b = 0;
+        public static Thread Thread = new Thread(new ThreadStart(vrem));
+        public static void vrem()
+        {
+            int time = 60;
+            while (true)
+            {
+                Thread.Sleep(1000); //про отведенное время
+                time--;
+                Console.SetCursorPosition(0, 15);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("осталось " + time + " сек");
+                if (time == 0)
+                {
+                    jaja.b = 1;
+                }
+            }
+        }
+    }
+}
