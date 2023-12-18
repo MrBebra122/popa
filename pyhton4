@@ -1,0 +1,394 @@
+//первый класс
+import sqlite3
+from класс3 import класс3
+from класс1 import класс1
+from класс4 import класс4
+
+def menu():
+    print("Выберите дейстие, которое хотите провести:")
+    print("1. Регистрация")
+    print("2. Авторизация")
+    print("3. Выйти")
+    choice = input("Введите соответствующую цифру (1, 2, 3): ")
+    return choice
+
+user_instance = User("", "", "")
+
+while Baza:
+    choice = main_menu()
+    
+    if choice == "2":
+        authenticated = user_instance.authenticate()
+        authenticated_role = user_instance.get_role()
+        
+        if authenticated:
+            print(f"Добро пожаловать, {user_instance._username}!")
+            break
+        else:
+            print("Авторизация не выполнена.")
+    elif choice == "1":
+        user_instance.register()
+        print("Регистрация успешна")
+        break
+    elif choice == "3":
+        print("Программа завершена.")
+        exit()
+    else:
+        print("Некорректный ввод. Пожалуйста, выберите 1, 2 или 3.")
+
+user_instance = User("", "", "")
+
+
+connection = sqlite3.connect("C:\Новая папка")
+cursor = connection.cursor()
+
+from internettariffmanager import InternetTariffManager
+
+db_path = "C:\Новая папка"
+tariff_manager = InternetTariffManager(db_path)
+
+while Baza:
+    print("\nМеню выбора операций:")
+    if authenticated_role == "Сотрудник":
+        print("1. Обновить цену тату")
+        print("2. Добавить тату")        
+        print("3. Фильтровать тату по цене")
+        print("4. Удалить тату")
+    elif authenticated_role == "admin":
+        print("5. Добавить роль пользователю")
+        print("6. Просмотреть всех пользователей с ролью 'Сотрудник'")
+
+    else:
+        print("7. Выбрать тату")
+        print("8. Сгенерировать чек")
+        print("9. Отобразить все данные")
+        print("0. Выйти")
+
+    choice = input("Выберите операцию (введите соответствующую цифру): ")
+
+    if choice == "1"and authenticated_role == "Сотрудник":
+        tariff_id = input("Введите ID тату для обновления цены: ")
+        new_price = int(input("Введите новую цену: "))
+    elif choice == "2"and authenticated_role == "Сотрудник":
+        tariff_manager.insert_tariff()        
+        tariff_manager.update_tariff_price(tariff_id, new_price)
+    elif choice == "3"and authenticated_role == "Сотрудник":
+        max_price = int(input("Введите максимальную цену для фильтрации: "))
+        filtered_data = tariff_manager.filter_by_price(max_price)
+        print("тату с ценой до {} рублей:".format(max_price))
+        print(filtered_data)
+    elif choice == "4"and authenticated_role == "Сотрудник":
+        tariff_id = input("Введите ID тату для удаления: ")
+        tariff_manager.delete_tariff(tariff_id)
+    elif choice == "5" and authenticated_role == "admin":
+        username_to_update = input("Введите имя пользователя, которому нужно добавить роль: ")
+        new_role = input("Введите новую роль: ")
+        user_instance.add_role_to_user(username_to_update, new_role)
+        print(f"Роль {new_role} успешно добавлена пользователю {username_to_update}.")
+    elif choice == "6" and authenticated_role == "admin":
+        cursor.execute("SELECT * FROM Users WHERE role = 'Сотрудник'")
+        employees = cursor.fetchall()
+        if employees:
+            print("Пользователи с ролью 'Сотрудник':")
+            for employee in employees:
+                print(employee)  
+        else:
+            print("Нет пользователей с ролью 'Сотрудник'.")
+         
+    elif choice == "7":
+        tariff_id = input("Введите ID тату для выбора: ")
+        tariff_manager.choose_tariff(tariff_id)
+    elif choice == "8":
+        tariff_manager.generate_receipt()
+    elif choice == "9":
+        tariff_manager.display_data()
+    elif choice == "0":
+        tariff_manager.close_connection()
+        break
+    else:
+        print("Некорректный ввод. Пожалуйста, выберите существующую операцию.")
+
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS InternetTariffs (
+        id INTEGER PRIMARY KEY,
+        data_limit_gb INTEGER,
+        price INTEGER
+    )
+''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Phones (
+        id INTEGER PRIMARY KEY, 
+        model TEXT,
+        memory_type TEXT, 
+        color TEXT, 
+        manufacturer TEXT
+        )
+''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS MasterInHome (
+        id INTEGER PRIMARY KEY,
+        price TEXT
+    )
+''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Users(
+        id INTEGER PRIMARY KEY,
+        username TEXT,
+        password TEXT,
+        role TEXT 
+        )
+    ''')
+connection.commit()
+connection.close()
+
+//класс2
+
+import sqlite3
+class класс1:
+    def __init__(self, db_path):
+        self._db_path = db_path
+
+    def execute_query(self, query, parameters=None):
+        connection = sqlite3.connect(self._db_path)
+        cursor = connection.cursor()
+
+        try:
+            if parameters:
+                cursor.execute(query, parameters)
+            else:
+                cursor.execute(query)
+
+            connection.commit()
+            return cursor
+        except Exception as e:
+            print(f"Ошибка: {e}")
+        finally:
+            connection.close()
+
+//класс3
+
+import sqlite3
+
+class класс2:
+    def __init__(self, db_path): 
+        self._db_path = db_path
+        self._connection = класс2.connect(self._db_path)
+        self._cursor = self._connection.cursor()
+        self._selected_tariffs = []  
+
+    def create_table(self):
+        self._cursor.execute('''
+            CREATE TABLE IF NOT EXISTS InternetTariffs (
+                id INTEGER PRIMARY KEY,
+                data_limit_gb TEXT,
+                price INTEGER
+            )
+        ''')
+        self._connection.commit()
+        
+    def choose_tariff(self, tariff_id):
+        sql = "SELECT * FROM InternetTariffs WHERE id = ?"
+        self._cursor.execute(sql, (tariff_id,))
+        tariff = self._cursor.fetchone()
+        if tariff:
+            self._selected_tariffs.append(tariff)
+            print(f"Тату {tariff_id} успешно выбран.")
+        else: 
+            print(f"Тату с ID {tariff_id} не найден.")
+
+    def insert_tariff(self):
+        data_limit_gb = input("Введите лимит данных в гигабайтах: ")
+        price = int(input("Введите стоимость тату в рублях: "))
+
+        sql = "INSERT INTO InternetTariffs (data_limit_gb, price) VALUES (?, ?)"
+        self._cursor.execute(sql, (data_limit_gb, price))
+        self._connection.commit()
+        print("Данные добавлены в таблицу InternetTariffs.")
+ 
+    def filter_by_price(self, max_price):
+        sql = "SELECT * FROM InternetTariffs WHERE price <= ?"
+        self._cursor.execute(sql, (max_price,))
+        data = self._cursor.fetchall()
+        return data
+        
+    def delete_tariff(self, tariff_id):
+        sql = "DELETE FROM InternetTariffs WHERE id = ?"
+        self._cursor.execute(sql, (tariff_id,))
+        self._connection.commit()
+        print("Тату успешно удалено.")
+
+    def update_tariff_price(self, tariff_id, new_price):
+        sql = "UPDATE InternetTariffs SET price = ? WHERE id = ?"
+        self._cursor.execute(sql, (new_price, tariff_id))
+        self._connection.commit()
+        print("Цена тату успешно обновлена.")
+
+    def generate_receipt(self, filename="C:\\Рабочий стол\\чек.txt"):
+        total_amount = 0
+
+        with open(filename, "w") as file:
+            file.write("Список выбранных тарифов:\n")
+            for tariff in self._selected_tariffs:
+                try:
+                    price = int(tariff[2])
+                    total_amount += price
+                    file.write(f"Тариф {tariff[0]}: {tariff[1]} GB - {price} руб.\n")
+                except ValueError:
+                    print(f"Ошибка преобразования цены: {tariff[2]} не является числом.")
+
+            file.write("\nОбщая сумма: {} руб.".format(total_amount))
+
+        
+        self.remove_selected_tariffs()
+
+        print(f"Чек успешно сгенерирован, сохранен в файле {filename} и выбранные тарифы удалены из базы данных.")
+
+    def remove_selected_tariffs(self):
+        for tariff in self._selected_tariffs:
+            tariff_id = tariff[0]
+            self.delete_tariff(tariff_id)
+
+    def display_data(self):
+        sql = "SELECT * FROM InternetTariffs"
+        self._cursor.execute(sql)
+        data = self._cursor.fetchall()
+        for row in data:
+            print(row)
+
+    def close_connection(self):
+        self._connection.close()
+
+  //класс4
+
+#user.py
+import sqlite3
+class класс4:
+    def __init__(self, username, password, role):
+        self._username = username
+        self._password = password
+        self._role = role
+    def get_role(self):
+        return self._role
+    
+    
+    def authenticate(self):
+        while True:
+            try:
+                input_username = input("Введите имя пользователя: ")
+                if any(c.isdigit() for c in input_username):
+                    raise ValueError("Имя пользователя не должно содержать цифры.")
+                break
+            except ValueError as ve:
+                print(f"Ошибка: {ve}")
+        
+        while True:
+            input_password = input("Введите пароль (только цифры): ")
+            if input_password.isdigit():
+                break
+            else:
+                print("Неверный формат пароля. Пожалуйста, введите только цифры.")
+        
+        connection = класс4.connect("C:\Новая папка")
+        cursor = connection.cursor()
+
+        try:
+            cursor.execute("SELECT * FROM Users WHERE username = ? AND password = ?",
+                           (input_username, input_password))
+            user_data = cursor.fetchone()
+
+            if user_data:
+                print("Авторизация успешна!")
+                self._username, self._password, self._role = user_data[1:]  
+                return True
+            else:
+                print("Неверное имя пользователя или пароль.")
+                return False
+
+        except класс4.Error as e:
+            print("Ошибка при выполнении SQL-запроса:", e)
+            return False
+
+        finally:
+            connection.close()
+
+    def register(self):
+        self._username = input("Создать имя пользователя: ")
+        self._password = input("Создать пароль: ")
+        self._role = input("Создать роль пользователя: ")
+
+    def validate_password(self, password):
+        
+        return len(password) >= 6
+    
+   
+
+    def add_role_to_user(self, username, role):
+        connection = класс4.connect("C:\Новая папка")
+        cursor = connection.cursor()
+        cursor.execute("UPDATE Users SET role = ? WHERE username = ?", (role, username))
+        connection.commit()
+        connection.close()
+
+    
+        
+        
+    def register(self):
+        while True:
+            try:
+                self.username = input("Создать имя пользователя: ")
+                
+                if not self.username.isalpha():
+                    raise ValueError("Имя пользователя не должно содержать цифры.")
+                break
+            except ValueError as ve:
+                print(f"Ошибка: {ve}")
+        
+        while True:
+            try:
+                self.password = input("Введите пароль (не должен содержать буквы): ")
+                
+                if self.password.isalpha() :
+                    raise ValueError("Неверный формат пароля. ")
+                break
+            except ValueError as ve:
+                print(f"Ошибка: {ve}")
+
+        connection = класс4.connect("C:\Новая папка")
+        cursor = connection.cursor()
+
+        try:
+            cursor.execute("INSERT INTO Users (username, password) VALUES (?, ?)",
+                           (self.username, self.password))
+            connection.commit()
+            print(f"Пользователь {self.username} успешно зарегистрирован.")
+
+        except класс4.Error as e:
+            print("Ошибка при выполнении SQL-запроса:", e)
+
+        finally:
+            connection.close()
+
+//класс5
+
+class класс3:
+    def __init__(self, model, memory_type, color, manufacturer):
+        self._model = model
+        self._memory_type = memory_type
+        self._color = color
+        self._manufacturer = manufacturer
+
+    
+
+        
+
+
+class Phone(класс3):
+    def __init__(self, model, memory_type, color, manufacturer, is_smartphone):
+        super().__init__(model, memory_type, color, manufacturer)
+        self._is_smartphone = is_smartphone
+
+    def display_info(self):
+        smartphone_info = "Smartphone" if self._is_smartphone else "Not a smartphone"
+        return f"{self._manufacturer} {self._model}, {self._color}, {self._memory_type} memory. {smartphone_info}"
+
