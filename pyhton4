@@ -2,16 +2,18 @@
 import sqlite3
 
 from класс3 import класс3
-
 from класс1 import класс1
-
 from класс4 import класс4
 
 def menu():
     print("Выберите дейстие, которое хотите провести:")
+    
     print("1. Регистрация")
+    
     print("2. Авторизация")
+    
     print("3. Выйти")
+    
     choice = input("Введите соответствующую цифру (1, 2, 3): ")
     return choice
 
@@ -52,14 +54,14 @@ tariff_manager = класс2(db_path)
 
 while True:
     print("\nМеню выбора операций:")
-    if authenticated_role == "Сотрудник":
+    if authenticated_role == "заказчик":
         print("1. Добавить тату")
         print("2. Обновить цену тату")
         print("3. Удалить тату")
         print("4. Фильтровать тату по цене")
     elif authenticated_role == "admin":
         print("5. Добавить роль пользователю")
-        print("6. Просмотреть всех пользователей с ролью 'Сотрудник'")
+        print("6. Просмотреть всех пользователей с ролью 'заказчик'")
 
     else:
         print("7. Выбрать тату")
@@ -69,19 +71,19 @@ while True:
         
     choice = input("Выберите операцию (введите соответствующую цифру): ")
 
-    if choice == "1"and authenticated_role == "Сотрудник":
+    if choice == "1"and authenticated_role == "заказчик":
         tatoo_manager.insert_tatoo()
         
-    elif choice == "2"and authenticated_role == "Сотрудник":
+    elif choice == "2"and authenticated_role == "заказчик":
         tatoo_id = input("Введите ID тату для обновления цены: ")
         new_price = int(input("Введите новую цену: "))
         tatoo_manager.update_tatoo_price(tatoo_id, new_price)
         
-    elif choice == "3"and authenticated_role == "Сотрудник":
+    elif choice == "3"and authenticated_role == "заказчик":
         tatoo_id = input("Введите ID тату для удаления: ")
         tatoo_manager.delete_tatoo(tatoo_id)
         
-    elif choice == "4"and authenticated_role == "Сотрудник":
+    elif choice == "4"and authenticated_role == "заказчик":
         max_price = int(input("Введите максимальную цену для фильтрации: "))
         filtered_data = tatoo_manager.filter_by_price(max_price)
         print("тату с ценой до {} рублей:".format(max_price))
@@ -94,14 +96,14 @@ while True:
         print(f"Роль {new_role} успешно добавлена пользователю {username_to_update}.")
         
     elif choice == "6" and authenticated_role == "admin":
-        cursor.execute("SELECT * FROM Users WHERE role = 'Сотрудник'")
+        cursor.execute("SELECT * FROM Users WHERE role = 'закзачик'")
         employees = cursor.fetchall()
         if employees:
-            print("Пользователи с ролью 'Сотрудник':")
+            print("Пользователи с ролью 'заказчик':")
             for employee in employees:
                 print(employee)  
         else:
-            print("Нет пользователей с ролью 'Сотрудник'.")
+            print("Нет пользователей с ролью 'заказчик'.")
          
     elif choice == "7":
         tatoo_id = input("Введите ID тату для выбора: ")
