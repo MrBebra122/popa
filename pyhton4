@@ -1,5 +1,4 @@
 //сок
-
 import sqlite3
 
 from класс3 import класс3
@@ -71,20 +70,20 @@ while True:
     choice = input("Выберите операцию (введите соответствующую цифру): ")
 
     if choice == "1"and authenticated_role == "Сотрудник":
-        tariff_manager.insert_tariff()
+        tatoo_manager.insert_tatoo()
         
     elif choice == "2"and authenticated_role == "Сотрудник":
-        tariff_id = input("Введите ID тату для обновления цены: ")
+        tatoo_id = input("Введите ID тату для обновления цены: ")
         new_price = int(input("Введите новую цену: "))
-        tariff_manager.update_tariff_price(tariff_id, new_price)
+        tatoo_manager.update_tatoo_price(tatoo_id, new_price)
         
     elif choice == "3"and authenticated_role == "Сотрудник":
-        tariff_id = input("Введите ID тату для удаления: ")
-        tariff_manager.delete_tariff(tariff_id)
+        tatoo_id = input("Введите ID тату для удаления: ")
+        tatoo_manager.delete_tatoo(tatoo_id)
         
     elif choice == "4"and authenticated_role == "Сотрудник":
         max_price = int(input("Введите максимальную цену для фильтрации: "))
-        filtered_data = tariff_manager.filter_by_price(max_price)
+        filtered_data = tatoo_manager.filter_by_price(max_price)
         print("тату с ценой до {} рублей:".format(max_price))
         print(filtered_data)
         
@@ -105,14 +104,14 @@ while True:
             print("Нет пользователей с ролью 'Сотрудник'.")
          
     elif choice == "7":
-        tariff_id = input("Введите ID тату для выбора: ")
-        tariff_manager.choose_tariff(tariff_id)
+        tatoo_id = input("Введите ID тату для выбора: ")
+        tatoo_manager.choose_tatoo(tatoo_id)
     elif choice == "8":
-        tariff_manager.generate_receipt()
+        tatoo_manager.generate_receipt()
     elif choice == "9":
-        tariff_manager.display_data()
+        tatoo_manager.display_data()
     elif choice == "0":
-        tariff_manager.close_connection()
+        tatoo_manager.close_connection()
         break
     else:
         print("Некорректный ввод. Пожалуйста, выберите существующую операцию.")
@@ -126,10 +125,10 @@ cursor.execute('''
     )
 ''')
 cursor.execute('''
-    CREATE TABLE IF NOT EXISTS Phones (
+    CREATE TABLE IF NOT EXISTS zakaz (
         id INTEGER PRIMARY KEY, 
         model TEXT,
-        memory_type TEXT, 
+        tatoo_type TEXT, 
         color TEXT, 
         manufacturer TEXT
         )
@@ -150,6 +149,7 @@ cursor.execute('''
     ''')
 connection.commit()
 connection.close()
+
 
 //класс1
 
@@ -176,7 +176,6 @@ class класс1:
             connection.close()
 
 //класс2
-
 import sqlite3
 
 class класс2:
@@ -184,34 +183,34 @@ class класс2:
         self._db_path = db_path
         self._connection = класс2.connect(self._db_path)
         self._cursor = self._connection.cursor()
-        self._selected_tariffs = []  
+        self._selected_tatoo = []  
 
     def create_table(self):
         self._cursor.execute('''
             CREATE TABLE IF NOT EXISTS класс (
                 id INTEGER PRIMARY KEY,
-                data_limit_gb TEXT,
+                vidtatoo TEXT,
                 price INTEGER
             )
         ''')
         self._connection.commit()
         
-    def choose_tariff(self, tariff_id):
+    def choose_tatoo(self, tatoo_id):
         sql = "SELECT * FROM класс WHERE id = ?"
-        self._cursor.execute(sql, (tariff_id,))
-        tariff = self._cursor.fetchone()
-        if tariff:
-            self._selected_tariffs.append(tariff)
-            print(f"Тату {tariff_id} успешно выбран.")
+        self._cursor.execute(sql, (tatoo_id,))
+        tatoo = self._cursor.fetchone()
+        if tatoo:
+            self._selected_tatoo.append(tatoo)
+            print(f"Тату {tatoo_id} успешно выбран.")
         else: 
-            print(f"Тату с ID {tariff_id} не найден.")
+            print(f"Тату с ID {tatoo_id} не найден.")
 
-    def insert_tariff(self):
-        data_limit_gb = input("Введите лимит данных в гигабайтах: ")
+    def insert_tatoo(self):
+        vidtatoo = input("Введите лимит данных в гигабайтах: ")
         price = int(input("Введите стоимость тату в рублях: "))
 
-        sql = "INSERT INTO класс (data_limit_gb, price) VALUES (?, ?)"
-        self._cursor.execute(sql, (data_limit_gb, price))
+        sql = "INSERT INTO класс (vidtatoo, price) VALUES (?, ?)"
+        self._cursor.execute(sql, (vidtatoo, price))
         self._connection.commit()
         print("Данные добавлены в таблицу класс.")
  
@@ -221,15 +220,15 @@ class класс2:
         data = self._cursor.fetchall()
         return data
         
-    def delete_tariff(self, tariff_id):
+    def delete_tatoo(self, tatoo_id):
         sql = "DELETE FROM класс WHERE id = ?"
-        self._cursor.execute(sql, (tariff_id,))
+        self._cursor.execute(sql, (tatoo_id,))
         self._connection.commit()
         print("Тату успешно удалено.")
-
-    def update_tariff_price(self, tariff_id, new_price):
+        
+    def update_tatoo_price(self, tatoo_id, new_price):
         sql = "UPDATE класс SET price = ? WHERE id = ?"
-        self._cursor.execute(sql, (new_price, tariff_id))
+        self._cursor.execute(sql, (new_price, tatoo_id))
         self._connection.commit()
         print("Цена тату успешно обновлена.")
 
@@ -238,26 +237,26 @@ class класс2:
 
         with open(filename, "w") as file:
             file.write("Список выбранных тарифов:\n")
-            for tariff in self._selected_tariffs:
+            for tatoo in self._selected_tatoos:
                 try:
-                    price = int(tariff[2])
+                    price = int(tatoo[2])
                     total_amount += price
-                    file.write(f"Тариф {tariff[0]}: {tariff[1]} GB - {price} руб.\n")
+                    file.write(f"Тариф {tatoo[0]}: {tatoo[1]} GB - {price} руб.\n")
                 except ValueError:
-                    print(f"Ошибка преобразования цены: {tariff[2]} не является числом.")
+                    print(f"Ошибка преобразования цены: {tatoo[2]} не является числом.")
 
             file.write("\nОбщая сумма: {} руб.".format(total_amount))
             
         
-        self.remove_selected_tariffs()
+        self.remove_selected_tatoos()
 
         print(f"Чек успешно сгенерирован, сохранен в файле {filename} и выбранные тарифы удалены из базы данных.")
 
-    def remove_selected_tariffs(self):
-        for tariff in self._selected_tariffs:
-            tariff_id = tariff[0]
-            self.delete_tariff(tariff_id)
-
+    def remove_selected_tatoo(self):
+        for tatoo in self._selected_tatoo:
+            tatoo_id = tatoo[0]
+            self.delete_tatoo(tatoo_id)
+            
     def display_data(self):
         sql = "SELECT * FROM класс"
         self._cursor.execute(sql)
@@ -267,30 +266,29 @@ class класс2:
 
     def close_connection(self):
         self._connection.close()
-
 //класс3
-
 class класс3:
-    def __init__(self, model, memory_type, color, manufacturer):
+    def __init__(self, model, tatoo_type, color, manufacturer):
         self._model = model
-        self._memory_type = memory_type
+        self._tatoo_type = tatoo_type
         self._color = color
         self._manufacturer = manufacturer
 
     
+        
 
 
 
+class zakaz(класс3):
+    def __init__(self, model, tatoo_type, color, manufacturer, is_coolzakaz):
+        super().__init__(model, tatoo_type, color, manufacturer)
+        self._is_coolzakaz = is_coolzakaz
 
-class Phone(класс3):
-    def __init__(self, model, memory_type, color, manufacturer, is_smartphone):
-        super().__init__(model, memory_type, color, manufacturer)
-        self._is_smartphone = is_smartphone
+    def obsh_info(self):
+        coolzakaz_info = "collzakaz" if self._is_collzakaz else "Not a collzakaz"
+        return f"{self._manufacturer} {self._model}, {self._color}, {self._tatoo_type} tatoo. {collzakaz_info}"
 
-    def display_info(self):
-        smartphone_info = "Smartphone" if self._is_smartphone else "Not a smartphone"
-        return f"{self._manufacturer} {self._model}, {self._color}, {self._memory_type} memory. {smartphone_info}"
-
+  
 //класс4
 #user.py
 import sqlite3
@@ -399,4 +397,7 @@ class класс4:
 
         finally:
             connection.close()
+
+
+
 
