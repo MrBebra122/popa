@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>Shrek.com</title>
+    </head>
+    <body>
+        
+            <img align="middle" src="C:\video\kid.jpg.png" width="800" height="600"><br color="red">
+
+            <audio src="C:\Users\o0684\Downloads\Soldier_PickAxeTaunt02.wav"controls autoplay muted loop align="right"></audio><br><hr color="red">
+
+            <iframe width="800" height="600" src="https://www.youtube.com/watch?v=xrvxmxbvyxU"
+            
+            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;
+            
+            picture-in-picture" allowfullscreen></iframe><br><hr color="red">
+
+            <video width="800" height="600" src="C:\video\video.mp4.mp4" controls muted loop ></video>
+    </body>
+</html>
