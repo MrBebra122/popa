@@ -1,0 +1,51 @@
+import java.util.Scanner;
+public class Main
+{
+    public static void main(String[] args)
+    {
+       Scanner in = new Scanner(System.in);
+       
+//выводит инициалы
+       System.out.print("введите свое фИО");
+       
+       String fio = in.nextLine();
+       
+//выводит возраст
+
+       System.out.print("введите свой возраст");
+       
+       int godi = in.nextInt();
+       
+//выводит Рост
+
+       System.out.print("введите свой Рост");
+       
+       int razm = in.nextInt();
+       
+//выводит является ли пользователь бюджетником или Внебюджетником
+
+       System.out.print("вы на бюджете или на внебюджете?");
+       
+       String plat = in.next();
+       
+//ну тут понятно
+
+       System.out.print("вы ЖЕНЩИНА или мужчина?");
+       
+       String pol = in.next();
+       
+//выводит всю прошлую, собранную информацию вместе и подписывает ее
+
+       System.out.printf("фИО пользователя: %s \n",fio);
+       
+       System.out.printf("Возраст пользователя: %d \n",godi);
+       
+       System.out.printf("Рост пользователя: %d \n",razm);
+       
+       System.out.println(plat);
+       
+       System.out.print(pol);
+       
+       in.close();
+    }
+}
