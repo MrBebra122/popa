@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> о тестировщике</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header,
+        main,
+        nav,
+        section,
+        aside,
+        footer {
+            padding: 20px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        header,
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+
+        <header>
+            <h1>о тестировщике</h1>
+        </header>
+
+
+        <main>
+            <section>
+                <h2>Профессиональный опыт</h2>
+                <p>Для работы опыт практически не нужен, достаточно иметь образование в сфере IT</p>
+            </section>
+
+            <section>
+                <h2>Навыки</h2>
+                <p>Навыки тестировщика включают в себя автоматизированное тестирование, ручное тестирование, и многое другое.</p>
+            </section>
+        </main>
+
+        <aside>
+            <h2>Дополнительная информация</h2>
+            <p>Здесь размещается дополнительная информация о моих проектах и интересах в области тестирования.</p>
+        </aside>
+
+        <footer>
+            <p>&copy; 2022 Веб-страница о тестировщике</p>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
