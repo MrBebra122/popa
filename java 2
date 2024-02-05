@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Ввод данных от пользователя
+        System.out.print("Введите ваш текущий вес в килограммах: ");
+        double a = scanner.nextDouble();
+
+        System.out.print("Введите ваш рост в метрах: ");
+        double b = scanner.nextDouble();
+
+        System.out.print("Введите ваш возраст: ");
+        int c = scanner.nextInt();
+
+        // Вычисление ИМТ
+        double bmi = calculateBMI(a, b);
+
+        // Вычисление идеального веса
+        double idealWeight = calculateIdealWeight(b);
+
+        // Вычисление дневной нормы калорий
+        double dailyCalories = calculateDailyCalories(a, b, c);
+
+        // Определение рекомендаций в зависимости от ИМТ
+        String recommendations = calculateRecommendations(bmi, idealWeight, a, dailyCalories);
+
+        // Вывод результатов
+        System.out.println("\nРезультаты:");
+        System.out.printf("Ваш ИМТ: %.2f\n", bmi);
+        System.out.printf("Идеальный вес: %.2f кг\n", idealWeight);
+        System.out.printf("Рекомендуемый дневной прием калорий: %.2f ккал\n", dailyCalories);
+        System.out.println(recommendations);
+
+        scanner.close();
+    }
+
+    // Метод для вычисления ИМТ
+    private static double calculateBMI(double weight, double height) {
+        return weight / (height * height);
+    }
+
+    // Метод для вычисления идеального веса
+    private static double calculateIdealWeight(double height) {
+        return 24.9 * height * height;
+    }
+
+    // Метод для вычисления дневной нормы калорий
+    private static double calculateDailyCalories(double weight, double height, int age) {
+        // Формула Харриса-Бенедикта
+        return 655 + 9.6 * weight + 1.8 * height - 4.7 * age;
+    }
+
+    // Метод для определения рекомендаций
+    private static String calculateRecommendations(double bmi, double idealWeight, double weight, double dailyCalories) {
+        // Код определения рекомендаций
+        // ...
+
+        return ""; // Заглушка, замените на реальный код
+    }
+}
