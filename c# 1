@@ -1,0 +1,125 @@
+//сам код. Я случайно удилил файл отвечающий за библиотеки во время работы когда мне приспичило почистить комп, посему код может выглядеть местами сырым 
+using System;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace TicTacToe
+{
+    public partial class MainWindow : Window
+    {
+        private bool isPlayerX = true;
+        private bool gameEnded = false; 
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            InitializeGame();
+        }
+
+        private void InitializeGame()
+        {
+            foreach (var button in FindVisualChildren<Button>(this))
+            {
+                button.Content = "";
+                button.IsEnabled = false;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (gameEnded) return; 
+
+            Button button = (Button)sender;
+
+            if (button.Content.ToString() == "")
+            {
+                if (isPlayerX)
+                    button.Content = "X";
+                else
+                    MakeRobotMove();
+                if (CheckForWinner() || CheckForDraw())
+                {
+                    gameEnded = true;
+                    MessageBox.Show("Game Over!");
+                }
+
+                isPlayerX = !isPlayerX;
+            }
+        }
+
+        private void MakeRobotMove()
+        {
+            Random random = new Random();
+            int randomIndex;
+            do
+            {
+                randomIndex = random.Next(0, 9);
+            } while (!((Button)FindName($"btn{randomIndex / 3}{randomIndex % 3}")).Content.ToString().Equals(""));
+
+            ((Button)FindName($"btn{randomIndex / 3}{randomIndex % 3}")).Content = "O";
+        }
+
+        private bool CheckForWinner()
+        {
+            return false;
+        }
+
+        private bool CheckForDraw()
+        {
+            return false;
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            gameEnded = false;
+            isPlayerX = true;
+            InitializeGame();
+        }
+        private static System.Collections.Generic.IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//код для странрицы
+<Window x:Class="TicTacToe.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tic Tac Toe" Height="350" Width="350">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- Buttons for the Tic Tac Toe board -->
+        <Button x:Name="btn00" Grid.Row="0" Grid.Column="0" Content="" Click="Button_Click"/>
+        <!-- Repeat for other buttons -->
+
+        <!-- Reset button -->
+        <Button x:Name="btnReset" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="New Game" Click="Reset_Click"/>
+    </Grid>
+</Window>
