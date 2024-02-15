@@ -1,0 +1,219 @@
+//xaml 
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Windows;
+
+namespace DailyPlannerWPF
+{
+    public class Note
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+
+        public Note(string title, string description, DateTime date)
+        {
+            Title = title;
+            Description = description;
+            Date = date;
+        }
+    }
+
+    public partial class MainWindow : Window
+    {
+        private List<Note> notes;
+        private string filePath = "notes.json";
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            LoadData();
+            UpdateNoteList(DateTime.Today);
+        }
+
+        private void LoadData()
+        {
+            notes = DeserializeFromJson<List<Note>>(filePath);
+        }
+
+        private void SaveData()
+        {
+            SerializeToJson(notes, filePath);
+        }
+
+        private void UpdateNoteList(DateTime selectedDate)
+        {
+            NotesListBox.ItemsSource = notes.FindAll(note => note.Date.Date == selectedDate.Date);
+        }
+
+        private void Calendar_SelectedDatesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            DateTime selectedDate = Calendar.SelectedDate ?? DateTime.Today;
+            UpdateNoteList(selectedDate);
+        }
+
+        private void NotesListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (NotesListBox.SelectedItem != null)
+            {
+                Note selectedNote = (Note)NotesListBox.SelectedItem;
+                TitleTextBox.Text = selectedNote.Title;
+                DescriptionTextBox.Text = selectedNote.Description;
+                DateTextBlock.Text = selectedNote.Date.ToShortDateString();
+            }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime selectedDate = Calendar.SelectedDate ?? DateTime.Today;
+            Note newNote = new Note(TitleTextBox.Text, DescriptionTextBox.Text, selectedDate);
+            notes.Add(newNote);
+            SaveData();
+            UpdateNoteList(selectedDate);
+            ClearFields();
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NotesListBox.SelectedItem != null)
+            {
+                Note selectedNote = (Note)NotesListBox.SelectedItem;
+                selectedNote.Title = TitleTextBox.Text;
+                selectedNote.Description = DescriptionTextBox.Text;
+                SaveData();
+                UpdateNoteList(selectedNote.Date);
+                ClearFields();
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NotesListBox.SelectedItem != null)
+            {
+                Note selectedNote = (Note)NotesListBox.SelectedItem;
+                notes.Remove(selectedNote);
+                SaveData();
+                UpdateNoteList(selectedNote.Date);
+                ClearFields();
+            }
+        }
+
+        private void ClearFields()
+        {
+            TitleTextBox.Text = "";
+            DescriptionTextBox.Text = "";
+            DateTextBlock.Text = "";
+            NotesListBox.SelectedItem = null;
+        }
+
+        private void SerializeToJson<T>(T data, string filePath)
+        {
+            string jsonData = JsonSerializer.Serialize(data);
+            File.WriteAllText(filePath, jsonData);
+        }
+
+        private T DeserializeFromJson<T>(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                string jsonData = File.ReadAllText(filePath);
+                return JsonSerializer.Deserialize<T>(jsonData);
+            }
+            return default(T);
+        }
+    }
+}
+
+//c# 
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows;
+
+namespace DailyPlannerWPF
+{
+    public class Note
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+
+        public Note(string Заголовок, string Описание, DateTime date)
+        {
+            Title = Заголовок;
+            Description = Описание;
+            Date = date;
+        }
+    }
+
+    public partial class MainWindow : Window
+    {
+        private List<Note> notes;
+        private string filePath = "notes.json";
+
+        public object JsonSerializer { get; private set; }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            UpdateNoteList(DateTime.Today);
+        }
+
+
+        private void UpdateNoteList(DateTime selectedDate)
+        {
+            NotesListBox.ItemsSource = notes.FindAll(note => note.Date.Date == selectedDate.Date);
+        }
+
+        private void Calendar_SelectedDatesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            DateTime selectedDate = Calendar.SelectedDate ?? DateTime.Today;
+            UpdateNoteList(selectedDate);
+        }
+
+        private void NotesListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (NotesListBox.SelectedItem != null)
+            {
+                Note selectedNote = (Note)NotesListBox.SelectedItem;
+                ЗаголовокTextBox.Text = selectedNote.Title;
+                ОписаниеTextBox.Text = selectedNote.Description;
+                DateTextBlock.Text = selectedNote.Date.ToShortDateString();
+            }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime selectedDate = Calendar.SelectedDate ?? DateTime.Today;
+            Note newNote = new Note(ЗаголовокTextBox.Text, ОписаниеTextBox.Text, selectedDate);
+            notes.Add(newNote);
+            UpdateNoteList(selectedDate);
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NotesListBox.SelectedItem != null)
+            {
+                Note selectedNote = (Note)NotesListBox.SelectedItem;
+                selectedNote.Title = ЗаголовокTextBox.Text;
+                selectedNote.Description = ОписаниеTextBox.Text;
+                UpdateNoteList(selectedNote.Date);
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NotesListBox.SelectedItem != null)
+            {
+                Note selectedNote = (Note)NotesListBox.SelectedItem;
+                notes.Remove(selectedNote);
+                UpdateNoteList(selectedNote.Date);
+            }
+        }
+
+    }
+}
