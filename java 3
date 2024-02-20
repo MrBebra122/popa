@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+
+        // Удаление пробелов и перевод букв к нижнему регистру
+        char[] charArray = input.replaceAll("\\s", "").toLowerCase().toCharArray();
+
+        // Проверка, является ли строка палиндромом
+        boolean isPalindrome = true;
+        for (int i = 0; i < charArray.length / 2; i++) {
+            if (charArray[i] != charArray[charArray.length - 1 - i]) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        // Вывод сообщения о палиндроме или завершение программы
+        if (isPalindrome) {
+            System.out.println("Строка является палиндромом.");
+        } else {
+            System.out.println("Строка не является палиндромом. Программа завершена.");
+            System.exit(0);
+        }
+    }
+}
