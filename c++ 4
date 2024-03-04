@@ -1,0 +1,81 @@
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+
+std::string reverse(const std::string& str) {
+    std::string reversed = str;
+    std::reverse(reversed.begin(), reversed.end());
+    return reversed;
+}
+
+std::string removeVowels(const std::string& str) {
+    std::string result;
+    for (char c : str) {
+        if (std::tolower(c) != 'a' && std::tolower(c) != 'e' && std::tolower(c) != 'i' && std::tolower(c) != 'o' && std::tolower(c) != 'u') {
+            result += c;
+        }
+    }
+    return result;
+}
+
+std::string removeConsonants(const std::string& str) {
+    std::string result;
+    for (char c : str) {
+        if (!std::isalpha(c) || (std::tolower(c) == 'a' || std::tolower(c) == 'e' || std::tolower(c) == 'i' || std::tolower(c) == 'o' || std::tolower(c) == 'u')) {
+            result += c;
+        }
+    }
+    return result;
+}
+
+std::string shuffle(const std::string& str) {
+    std::string shuffled = str;
+    std::random_shuffle(shuffled.begin(), shuffled.end());
+    return shuffled;
+}
+
+int main() {
+    std::string word;
+
+    std::cout << "Введите слово: ";
+    std::cin >> word;
+
+    int choice;
+
+    do {
+        std::cout << "\nВыберите действие:\n";
+        std::cout << "1. Вывести слово задом наперед.\n";
+        std::cout << "2. Вывести слово без гласных.\n";
+        std::cout << "3. Вывести слово без согласных.\n";
+        std::cout << "4. Рандомно раскидывать буквы заданного слова.\n";
+        std::cout << "0. Выйти.\n";
+        std::cout << "Ваш выбор: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                std::cout << "Результат: " << reverse(word) << std::endl;
+                break;
+            case 2:
+                std::cout << "Результат: " << removeVowels(word) << std::endl;
+                break;
+            case 3:
+                std::cout << "Результат: " << removeConsonants(word) << std::endl;
+                break;
+            case 4:
+                std::cout << "Результат: " << shuffle(word) << std::endl;
+                break;
+            case 0:
+                std::cout << "Программа завершена.\n";
+                break;
+            default:
+                std::cout << "Некорректный выбор. Пожалуйста, введите еще раз.\n";
+                break;
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
