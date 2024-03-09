@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Landing Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: url('C:\Users\o0684\Downloads\wallpaperbetter.com_7680x4320 (1).jpg') center/cover no-repeat; 
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        section {
+            padding: 50px;
+            text-align: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        section h2 {
+            color: #333;
+        }
+
+        section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .cta-container {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            background-color: #ff6600;
+            color: #fff;
+            padding: 15px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #cc5500;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ВЫ - РАЙАН ГОСЛИНГ</h1>
+    </header>
+
+    <section>
+        <h2>Вы, и только вы являетесь Райаном Гослином</h2>
+        <p>Нажав всего одну кнопку вы станете знаменитым и успешным актером, а точнее любой его выигранной ролью</p>
+        <div class="cta-container">
+            <a href="#" class="cta-button">За руль</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 gosling</p>
+    </footer>
+
+</body>
+</html>
