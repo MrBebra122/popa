@@ -1,0 +1,123 @@
+#include <iostream>
+#include <string>
+
+class BankAccount {
+private:
+    int accountNumber;
+    double balance;
+    double interestRate;
+
+public:
+    // Конструктор
+    BankAccount(int accountNumber, double initialBalance) {
+        this->accountNumber = accountNumber;
+        this->balance = initialBalance;
+        this->interestRate = 0.0;
+    }
+
+    // Позволяет внести средства на счет
+    void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            std::cout << "Средства внесены успешно. Новый баланс: " << balance << std::endl;
+        } else {
+            std::cout << "Ошибка: сумма для внесения должна быть положительной." << std::endl;
+        }
+    }
+
+    // Позволяет снять средства со счета
+    void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            std::cout << "Средства сняты успешно. Новый баланс: " << balance << std::endl;
+        } else {
+            std::cout << "Ошибка: недостаточно средств на счете." << std::endl;
+        }
+    }
+
+    // Возвращает текущий баланс счета
+    double getBalance() {
+        std::cout << "Текущий баланс счета: " << balance << std::endl;
+        return balance;
+    }
+
+    // Рассчитывает и возвращает сумму процентов, заработанных на счете
+    double getInterest() {
+        return balance * interestRate * (1.0 / 12.0);
+    }
+
+    // Обновляет процентную ставку
+    void setInterestRate(double newRate) {
+        interestRate = newRate;
+        std::cout << "Процентная ставка: " << interestRate << std::endl;
+    }
+
+    // Возвращает номер банковского счета
+    int getAccountNumber() {
+        std::cout << "Номер банковского счета: " << accountNumber << std::endl;
+        return accountNumber;
+    }
+
+    // Дружественная функция для перевода средств между счетами
+    friend bool transfer(BankAccount& fromAccount, BankAccount& toAccount, double amount);
+};
+
+// Функция для перевода средств между счетами
+bool transfer(BankAccount& fromAccount, BankAccount& toAccount, double amount) {
+    if (amount > 0 && amount <= fromAccount.balance) {
+        fromAccount.balance -= amount;
+        toAccount.balance += amount;
+        std::cout << "Перевод выполнен успешно." << std::endl;
+        return true;
+    } else {
+        std::cout << "Ошибка: невозможно выполнить перевод." << std::endl;
+        return false;
+    }
+}
+
+int main() {
+    // Пример использования класса BankAccount
+    BankAccount account1(123456, 1000.0);
+    BankAccount account2(654321, 500.0);
+    std::string command;
+    double amount;
+
+    std::cout << "Введите команду (deposit, withdraw, getBalance, setInterestRate, getAccountNumber, transfer): ";
+    std::cin >> command;
+
+    if (command == "deposit") {
+        std::cout << "Введите сумму для внесения: ";
+        std::cin >> amount;
+        account1.deposit(amount);
+    } else if (command == "withdraw") {
+        std::cout << "Введите сумму для снятия: ";
+        std::cin >> amount;
+        account1.withdraw(amount);
+    } else if (command == "getBalance") {
+        account1.getBalance();
+    } else if (command == "setInterestRate") {
+        std::cout << "Введите новую процентную ставку: ";
+        std::cin >> amount;
+        account1.setInterestRate(amount);
+    } else if (command == "getAccountNumber") {
+        account1.getAccountNumber();
+    } else if (command == "transfer") {
+        int fromAccountNumber, toAccountNumber;
+        std::cout << "Введите номер вашего счета: ";
+        std::cin >> fromAccountNumber;
+        std::cout << "Введите номер счета получателя: ";
+        std::cin >> toAccountNumber;
+        std::cout << "Введите сумму для перевода: ";
+        std::cin >> amount;
+        
+        if (fromAccountNumber == account1.getAccountNumber() && toAccountNumber == account2.getAccountNumber()) {
+            transfer(account1, account2, amount);
+        } else {
+            std::cout << "Ошибка: неверные номера счетов." << std::endl;
+        }
+    } else {
+        std::cout << "Неверная команда." << std::endl;
+    }
+
+    return 0;
+}
