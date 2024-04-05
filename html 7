@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адаптивный дизайн</title>
+    <style>
+        /* Стили для общих элементов */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* Медиа-запрос для компьютеров и ноутбуков */
+        @media only screen and (min-width: 1024px) {
+            /* Стили для компьютеров и ноутбуков */
+            h1 {
+                font-size: 36px;
+            }
+            .drive-window {
+                width: 300px;
+                height: 200px;
+                background-color: #f0f0f0;
+                border: 2px solid #ccc;
+                margin: 20px auto;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Медиа-запрос для планшетов */
+        @media only screen and (min-width: 768px) and (max-width: 1023px) {
+            /* Стили для планшетов */
+            h1 {
+                font-size: 24px;
+            }
+            .drive-window {
+                width: 250px;
+                height: 150px;
+                margin: 10px auto;
+            }
+        }
+
+        /* Медиа-запрос для телефонов */
+        @media only screen and (max-width: 767px) {
+            /* Стили для телефонов */
+            h1 {
+                font-size: 18px;
+            }
+            .drive-window {
+                width: 200px;
+                height: 100px;
+                margin: 5px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Пример адаптивного дизайна</h1>
+    <div class="drive-window">
+        Drive
+    </div>
+    <p>В котором Райан Гослинг снимался.</p>
+</body>
+</html>
