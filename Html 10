@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильмы</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Список фильмов</h1>
+        <div id="films-list"></div>
+        <hr>
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" id="title" class="form-control mb-2" placeholder="Название фильма">
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="director" class="form-control mb-2" placeholder="Режиссер">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary btn-block" onclick="addFilm()">Добавить фильм</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Film {
+            constructor(title, director) {
+                this.title = title;
+                this.director = director;
+            }
+        }
+
+        let films = [];
+
+        function addFilm() {
+            const titleInput = document.getElementById('title');
+            const directorInput = document.getElementById('director');
+
+            const title = titleInput.value.trim();
+            const director = directorInput.value.trim();
+
+            if (!title || !director) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+
+            const newFilm = new Film(title, director);
+            films.push(newFilm);
+
+            displayFilms();
+            titleInput.value = '';
+            directorInput.value = '';
+        }
+
+        function deleteFilm(index) {
+            films.splice(index, 1);
+            displayFilms();
+        }
+
+        function displayFilms() {
+            const filmsList = document.getElementById('films-list');
+            filmsList.innerHTML = '';
+
+            films.forEach((film, index) => {
+                const filmElement = document.createElement('div');
+                filmElement.classList.add('card', 'mb-2');
+                filmElement.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">${film.title}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${film.director}</h6>
+                        <button class="btn btn-danger" onclick="deleteFilm(${index})">Удалить</button>
+                    </div>
+                `;
+                filmsList.appendChild(filmElement);
+            });
+        }
+    </script>
+</body>
+</html>
