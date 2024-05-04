@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильмы</title>
+    <style>
+        .film {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="films-list"></div>
+    <div>
+        <input type="text" id="title" placeholder="Название фильма">
+        <input type="text" id="director" placeholder="Режиссер">
+        <button onclick="addFilm()">Добавить фильм</button>
+    </div>
+
+    <script>
+        let films = [];
+
+        function Film(title, director) {
+            this.title = title;
+            this.director = director;
+        }
+
+        function addFilm() {
+            const titleInput = document.getElementById('title');
+            const directorInput = document.getElementById('director');
+
+            const title = titleInput.value.trim();
+            const director = directorInput.value.trim();
+
+            if (title === '' || director === '') {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+
+            const newFilm = new Film(title, director);
+            films.push(newFilm);
+
+            displayFilms();
+            titleInput.value = '';
+            directorInput.value = '';
+        }
+
+        function deleteFilm(index) {
+            films.splice(index, 1);
+            displayFilms();
+        }
+
+        function displayFilms() {
+            const filmsList = document.getElementById('films-list');
+            filmsList.innerHTML = '';
+
+            films.forEach((film, index) => {
+                const filmElement = document.createElement('div');
+                filmElement.classList.add('film');
+                filmElement.innerHTML = `
+                    <p><strong>Название:</strong> ${film.title}</p>
+                    <p><strong>Режиссер:</strong> ${film.director}</p>
+                    <button onclick="deleteFilm(${index})">Удалить</button>
+                `;
+                filmsList.appendChild(filmElement);
+            });
+        }
+    </script>
+</body>
+</html>
